@@ -4,5 +4,11 @@
     "email": "julio@gmail.com",
     "password": "$2b$10$wBm.1.Q.T06P.izQkk6DZeXJjtGNHPcRATsAnKmzdhM3hVFrN4r6S",
     "createdAt": "2026-01-15T14:12:04.694Z"
+  },
+  {
+    "id": "8ca05d5d-7f0a-4df7-b8b5-523cf36e3440",
+    "email": "jose@gmail.com",
+    "password": "$2b$10$4GqiY8hVqUVzD2OhYb.ea.R2LZ2b/JAdJhbBwYjO/5RMfKDEeuPCm",
+    "createdAt": "2026-01-22T12:02:45.646Z"
   }
 ]
