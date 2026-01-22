@@ -10,5 +10,12 @@
     "email": "jose@gmail.com",
     "password": "$2b$10$4GqiY8hVqUVzD2OhYb.ea.R2LZ2b/JAdJhbBwYjO/5RMfKDEeuPCm",
     "createdAt": "2026-01-22T12:02:45.646Z"
+  },
+  {
+    "id": "ad643220-1f44-4160-8995-995a1b429e63",
+    "email": "julio522002@gmail.com",
+    "password": null,
+    "createdAt": "2026-01-22T14:05:36.881Z",
+    "githubId": 111384294
   }
 ]

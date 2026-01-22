@@ -66,8 +66,27 @@ async function getMe(req, res) {
     }
 }
 
+/* controlador para callback de GitHub OAuth
+@param {Object} req
+@param {Object} res
+*/
+async function githubCallback(req, res) {
+    try {
+        const { code } = req.body;
+        if (!code) {
+            return sendErrorResponse(res, "Código de autorización no proporcionado.", 400);
+        }
+
+        const { token, user } = await authService.loginOrRegisterWithGitHub(code);
+        sendSuccessResponse(res, { token, user }, "Usuario autenticado con GitHub exitosamente.");
+    } catch (error) {
+        sendErrorResponse(res, "Error durante la autenticación con GitHub.", 500);
+    }
+}
+
 module.exports = {
     register,
     login,
-    getMe
+    getMe,
+    githubCallback
 };

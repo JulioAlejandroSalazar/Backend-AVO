@@ -7,5 +7,6 @@ const { loginLimiter } = require("../middleware/rateLimit");
 router.post('/register', authController.register);
 router.post('/login', loginLimiter, authController.login);
 router.get('/me', verifyToken, authController.getMe);
+router.post('/github', authController.githubCallback);
 
 module.exports = router;

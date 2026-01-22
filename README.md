@@ -1,172 +1,184 @@
-# Backend – Autenticación de Usuarios (Node.js + Express + JWT)
+### Backend – Autenticación de Usuarios (Node.js + Express + JWT + GitHub OAuth)
 
-Este proyecto corresponde al **backend** de un sistema de autenticación de usuarios desarrollado con **Node.js y Express.js**, que permite el **registro**, **inicio de sesión** y **verificación de sesión mediante JWT**, almacenando los datos de usuarios de forma local en un archivo `.json`.
+Este proyecto corresponde al **backend** de un sistema de autenticación de usuarios desarrollado con **Node.js y Express.js**, que permite:
 
+- Registro de usuarios con email y contraseña  
+- Inicio de sesión tradicional  
+- Inicio de sesión mediante **GitHub OAuth 2.0**  
+- Verificación de sesión mediante **JSON Web Tokens (JWT)**  
+
+Los datos de los usuarios se almacenan de forma local en un archivo `.json`, cumpliendo los requisitos del ejercicio **sin utilizar bases de datos externas**.  
 El backend está diseñado para ser consumido por una aplicación cliente desarrollada en **React**.
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+### 🛠️ Tecnologías utilizadas
 
-- Node.js
-- Express.js
-- JSON Web Tokens (JWT)
-- bcrypt
-- dotenv
-- cors
-- helmet
-- morgan
-- uuid
+- Node.js  
+- Express.js  
+- JSON Web Tokens (JWT)  
+- bcrypt  
+- dotenv  
+- cors  
+- helmet  
+- morgan  
+- uuid  
 
 ---
 
-## ⚙️ Configuración del entorno
+### ⚙️ Configuración del entorno
 
 Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
 
 ```
-PORT=3001
-JWT_SECRET=jwt_secret_key
+PORT=3001  
+JWT_SECRET=jwt_secret_key  
+
+GITHUB_CLIENT_ID=tu_client_id  
+GITHUB_CLIENT_SECRET=tu_client_secret  
+GITHUB_REDIRECT_URI=http://localhost:5173/auth/github/callback  
 ```
 
 ---
 
-## 📦 Instalación de dependencias
+### 📦 Instalación de dependencias
 
 Ejecutar el siguiente comando:
 
 ```
-npm install
+npm install  
 ```
 
 ---
 
-## ▶️ Ejecución del servidor
+### ▶️ Ejecución del servidor
 
 Para iniciar el servidor en modo desarrollo:
 
 ```
-npm run dev
+npm run dev  
 ```
 
 El servidor quedará disponible en:
 
 ```
-http://localhost:3001
+http://localhost:3001  
 ```
 
 ---
 
-## 📌 Funcionalidades implementadas
+### 📌 Funcionalidades implementadas
 
-### ✔ Registro de usuarios
-- Recepción de correo electrónico y contraseña.
-- Validación de campos vacíos.
-- Validación de formato de email.
-- Encriptación de contraseña con bcrypt.
-- Almacenamiento local de usuarios en un archivo `.json`.
+#### ✔ Registro de usuarios (email y contraseña)
+- Validación de campos obligatorios  
+- Validación de formato de email  
+- Encriptación de contraseña con bcrypt  
+- Almacenamiento local en archivo `.json`  
 
-### ✔ Inicio de sesión
-- Validación de credenciales.
-- Comparación segura de contraseñas.
-- Generación de token de autenticación (JWT).
-- Retorno del token al cliente.
+#### ✔ Inicio de sesión tradicional
+- Validación de credenciales  
+- Generación de token JWT  
+- Retorno del token al cliente  
 
-### ✔ Verificación de sesión
-- Middleware que valida el token enviado en el header `Authorization`.
-- Acceso a rutas protegidas solo con token válido.
+#### ✔ Inicio de sesión con GitHub (OAuth 2.0)
+- Recepción del `code` desde el frontend  
+- Intercambio del código por un `access_token` de GitHub  
+- Obtención de información del usuario desde la API de GitHub  
+- Creación automática del usuario si no existe  
+- Generación de JWT propio del sistema  
 
-### ✔ Cierre de sesión
-- El cierre de sesión se gestiona desde el cliente eliminando el token almacenado (JWT).
+#### ✔ Verificación de sesión
+- Middleware que valida el token JWT  
+- Protección de rutas privadas  
 
----
-
-## 🔐 Autenticación con JWT
-
-El token debe enviarse en cada solicitud protegida mediante el siguiente header:
-
-```
-Authorization: Bearer <token>
-```
+#### ✔ Cierre de sesión
+- Gestionado desde el frontend eliminando el token almacenado  
 
 ---
 
-## 📡 Endpoints disponibles
+### 🔐 Autenticación con JWT
 
-### 🔸 Registro de usuario
-**POST** `/api/auth/register`
-
-**Body:**
+El token debe enviarse en cada solicitud protegida mediante el header:
 
 ```
-{
-  "email": "usuario@email.com",
-  "password": "123456"
-}
+Authorization: Bearer <token>  
 ```
 
 ---
 
-### 🔸 Login de usuario
-**POST** `/api/auth/login`
+### 📡 Endpoints disponibles
 
-**Body:**
+#### 🔸 Registro de usuario
+POST `/api/auth/register`
 
-```
-{
-  "email": "usuario@email.com",
-  "password": "123456"
-}
-```
-
-**Respuesta exitosa:**
+Body:
 
 ```
-{
-  "status": "success",
-  "data": {
-    "token": {
-      "token": "jwt_token",
-      "user": {
-        "id": "uuid",
-        "email": "usuario@email.com"
-      }
-    }
-  }
-}
+{  
+  "email": "usuario@email.com",  
+  "password": "123456"  
+}  
 ```
 
 ---
 
-### 🔸 Obtener información del usuario autenticado
-**GET** `/api/auth/me`
+#### 🔸 Login de usuario
+POST `/api/auth/login`
 
-**Headers:**
+Body:
 
 ```
-Authorization: Bearer <token>
+{  
+  "email": "usuario@email.com",  
+  "password": "123456"  
+}  
 ```
 
 ---
 
-## 🧪 Almacenamiento local
+#### 🔸 Login con GitHub
+POST `/api/auth/github`
 
-Los usuarios se almacenan localmente en:
+Body:
 
+```  
+{  
+  "code": "codigo_de_autorizacion_github"  
+}  
 ```
-data/users.json
-```
-
-Este enfoque cumple con los requisitos del ejercicio sin utilizar bases de datos externas.
 
 ---
 
-## 🔗 Integración con Frontend
+#### 🔸 Obtener información del usuario autenticado
+GET `/api/auth/me`
 
-Este backend está preparado para ser consumido por una aplicación cliente desarrollada en **React**, permitiendo:
+Headers:
 
-- Registro de usuarios
-- Inicio de sesión
-- Almacenamiento del token en `localStorage` o `sessionStorage`
-- Acceso a vistas protegidas
-- Cierre de sesión eliminando el token
+```
+Authorization: Bearer <token>  
+```
+
+---
+
+### 🧪 Almacenamiento local
+
+Los usuarios se almacenan en:
+
+```
+data/users.json  
+```
+
+Este enfoque cumple con los requisitos académicos del proyecto sin utilizar bases de datos externas.
+
+---
+
+### 🔗 Integración con Frontend
+
+Este backend permite:
+
+- Registro de usuarios  
+- Inicio de sesión tradicional  
+- Inicio de sesión con GitHub  
+- Uso de JWT para autenticación  
+- Acceso a rutas protegidas  
+- Cierre de sesión desde el cliente  
