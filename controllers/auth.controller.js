@@ -1,6 +1,8 @@
 const {v4: uuidv4} = require('uuid');
 const authService = require('../services/auth.service');
 const { validateRegisterBody, validateLoginBody } = require('../middleware/validation');
+const { validateSolicitudBody } = require("../middleware/solicitudes.validation");
+
 
 function sendSuccessResponse(res, data, message = {}) {
     res.json({
@@ -64,6 +66,19 @@ async function getMe(req, res) {
             sendErrorResponse(res, "Error al obtener la información del usuario.", 500);
         }
     }
+}
+
+async function crearSolicitud(req, res) {
+  const validation = validateSolicitudBody(req.body);
+
+  if (!validation.isValid) {
+    return res.status(400).json({
+      status: "error",
+      message: validation.errors.join(" "),
+      time: new Date().toISOString(),
+      task_id: uuidv4()
+    });
+  }
 }
 
 /* controlador para callback de GitHub OAuth

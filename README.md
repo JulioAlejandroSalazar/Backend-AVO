@@ -1,18 +1,18 @@
-### Backend – Autenticación de Usuarios (Node.js + Express + JWT + GitHub OAuth)
+# Backend – Autenticación y Gestión de Solicitudes  
+**Node.js + Express + JWT + GitHub OAuth + SSR (EJS)**
 
-Este proyecto corresponde al **backend** de un sistema de autenticación de usuarios desarrollado con **Node.js y Express.js**, que permite:
+Este proyecto corresponde al **backend** de una aplicación web que implementa:
 
-- Registro de usuarios con email y contraseña  
-- Inicio de sesión tradicional  
-- Inicio de sesión mediante **GitHub OAuth 2.0**  
-- Verificación de sesión mediante **JSON Web Tokens (JWT)**  
+- Sistema completo de **autenticación de usuarios**
+- **Gestión de solicitudes de viaje**
+- **Renderizado del lado del servidor (SSR)** mediante **EJS**
+- Consumo desde un frontend desarrollado en **React (SPA)**
 
-Los datos de los usuarios se almacenan de forma local en un archivo `.json`, cumpliendo los requisitos del ejercicio **sin utilizar bases de datos externas**.  
-El backend está diseñado para ser consumido por una aplicación cliente desarrollada en **React**.
+El backend expone **APIs REST** y además **vistas SSR**, permitiendo demostrar la convivencia entre **SPA y SSR** en un mismo proyecto, cumpliendo los requisitos académicos del ejercicio.
 
 ---
 
-### 🛠️ Tecnologías utilizadas
+## 🛠️ Tecnologías utilizadas
 
 - Node.js  
 - Express.js  
@@ -23,162 +23,152 @@ El backend está diseñado para ser consumido por una aplicación cliente desarr
 - helmet  
 - morgan  
 - uuid  
+- EJS (Server-Side Rendering)  
 
 ---
 
-### ⚙️ Configuración del entorno
+## ⚙️ Configuración del entorno
 
 Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
 
 ```
-PORT=3001  
-JWT_SECRET=jwt_secret_key  
+PORT=3001
+JWT_SECRET=jwt_secret_key
 
-GITHUB_CLIENT_ID=tu_client_id  
-GITHUB_CLIENT_SECRET=tu_client_secret  
-GITHUB_REDIRECT_URI=http://localhost:5173/auth/github/callback  
+GITHUB_CLIENT_ID=tu_client_id
+GITHUB_CLIENT_SECRET=tu_client_secret
+GITHUB_REDIRECT_URI=http://localhost:5173/auth/github/callback
 ```
 
 ---
 
-### 📦 Instalación de dependencias
-
-Ejecutar el siguiente comando:
+## 📦 Instalación de dependencias
 
 ```
-npm install  
+npm install
 ```
 
 ---
 
-### ▶️ Ejecución del servidor
-
-Para iniciar el servidor en modo desarrollo:
+## ▶️ Ejecución del servidor
 
 ```
-npm run dev  
+npm run dev
 ```
 
-El servidor quedará disponible en:
+Servidor disponible en:
 
 ```
-http://localhost:3001  
+http://localhost:3001
 ```
 
 ---
 
-### 📌 Funcionalidades implementadas
+## 📌 Funcionalidades implementadas
 
-#### ✔ Registro de usuarios (email y contraseña)
-- Validación de campos obligatorios  
-- Validación de formato de email  
-- Encriptación de contraseña con bcrypt  
-- Almacenamiento local en archivo `.json`  
-
-#### ✔ Inicio de sesión tradicional
-- Validación de credenciales  
-- Generación de token JWT  
-- Retorno del token al cliente  
-
-#### ✔ Inicio de sesión con GitHub (OAuth 2.0)
-- Recepción del `code` desde el frontend  
-- Intercambio del código por un `access_token` de GitHub  
-- Obtención de información del usuario desde la API de GitHub  
-- Creación automática del usuario si no existe  
-- Generación de JWT propio del sistema  
-
-#### ✔ Verificación de sesión
-- Middleware que valida el token JWT  
+### ✔ Autenticación de usuarios
+- Registro con email y contraseña  
+- Inicio de sesión tradicional  
+- Inicio de sesión mediante **GitHub OAuth 2.0**  
+- Generación y validación de **JWT**  
 - Protección de rutas privadas  
-
-#### ✔ Cierre de sesión
-- Gestionado desde el frontend eliminando el token almacenado  
+- Cierre de sesión desde el frontend  
 
 ---
 
-### 🔐 Autenticación con JWT
+### ✔ Gestión de solicitudes de viaje
+- Registro de solicitudes personalizadas  
+- Validación de campos obligatorios  
+- Validación de formato de correo electrónico  
+- Listado completo de solicitudes  
+- Persistencia de datos simulada  
 
-El token debe enviarse en cada solicitud protegida mediante el header:
+---
+
+### ✔ Server-Side Rendering (SSR)
+- Renderizado de vistas mediante **EJS**
+- Listado de solicitudes generado en el servidor
+- Acceso directo vía navegador sin SPA
+- Integración completa con la API backend
+
+---
+
+## 🔐 Autenticación con JWT
+
+Las rutas protegidas requieren el siguiente header:
 
 ```
-Authorization: Bearer <token>  
+Authorization: Bearer <token>
 ```
 
 ---
 
-### 📡 Endpoints disponibles
+## 📡 Endpoints disponibles
 
-#### 🔸 Registro de usuario
+### 🔸 Registro de usuario
 POST `/api/auth/register`
 
-Body:
-
 ```
-{  
-  "email": "usuario@email.com",  
-  "password": "123456"  
-}  
+{
+  "email": "usuario@email.com",
+  "password": "123456"
+}
 ```
 
 ---
 
-#### 🔸 Login de usuario
+### 🔸 Login de usuario
 POST `/api/auth/login`
 
-Body:
-
 ```
-{  
-  "email": "usuario@email.com",  
-  "password": "123456"  
-}  
+{
+  "email": "usuario@email.com",
+  "password": "123456"
+}
 ```
 
 ---
 
-#### 🔸 Login con GitHub
+### 🔸 Login con GitHub
 POST `/api/auth/github`
 
-Body:
-
-```  
-{  
-  "code": "codigo_de_autorizacion_github"  
-}  
+```
+{
+  "code": "codigo_de_autorizacion_github"
+}
 ```
 
 ---
 
-#### 🔸 Obtener información del usuario autenticado
+### 🔸 Usuario autenticado
 GET `/api/auth/me`
 
-Headers:
+---
 
-```
-Authorization: Bearer <token>  
-```
+### 🔸 Crear solicitud de viaje
+POST `/api/solicitudes`
 
 ---
 
-### 🧪 Almacenamiento local
-
-Los usuarios se almacenan en:
-
-```
-data/users.json  
-```
-
-Este enfoque cumple con los requisitos académicos del proyecto sin utilizar bases de datos externas.
+### 🔸 Listar solicitudes (API)
+GET `/api/solicitudes`
 
 ---
 
-### 🔗 Integración con Frontend
+### 🔸 Listar solicitudes (SSR)
+GET `/api/solicitudes/ssr`
 
-Este backend permite:
+Renderiza una vista HTML usando **EJS**, mostrando todas las solicitudes registradas.
 
-- Registro de usuarios  
-- Inicio de sesión tradicional  
-- Inicio de sesión con GitHub  
-- Uso de JWT para autenticación  
-- Acceso a rutas protegidas  
-- Cierre de sesión desde el cliente  
+---
+
+## 🧪 Persistencia simulada
+
+- Usuarios almacenados en:
+```
+  data/users.json
+```
+
+- Solicitudes almacenadas de forma simulada en el servidor
+
+No se utilizan bases de datos externas.

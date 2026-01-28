@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Solicitudes de Viaje</title>
+</head>
+<body style="background:#f3f4f6; font-family:sans-serif">
+  <div style="max-width:600px;margin:40px auto;background:white;padding:30px;border-radius:12px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:20px">
+        <a
+            href="http://localhost:5173/home"
+            style="text-decoration:none;background:#4b5563;color:white;padding:10px 16px;border-radius:8px"
+        >
+            ← Volver al Home
+        </a>
+
+        <a
+            href="http://localhost:5173/solicitudes"
+            style="text-decoration:none;background:#2563eb;color:white;padding:10px 16px;border-radius:8px"
+        >
+            Ver Solicitudes (SPA)
+        </a>
+    </div>
+
+    <h1 style="text-align:center">Solicitudes registradas</h1>
+
+    <ul>
+      <% solicitudes.forEach(s => { %>
+        <li style="background:#f9fafb;padding:10px;margin-bottom:8px;border-radius:6px">
+          <strong>#<%= s.id %></strong> —
+          <%= s.nombreCliente %> —
+          <%= s.origen %> → <%= s.destino %>
+          (<%= s.estado %>)
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>
