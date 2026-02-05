@@ -27,7 +27,7 @@ function crearSolicitud(req, res) {
     email,
     fechaSalida,
     fechaRegreso,
-    estado,
+    estado: estado || "pendiente",
     fechaRegistro: new Date().toLocaleString()
   };
 
@@ -39,6 +39,34 @@ function listarSolicitudes(req, res) {
   res.json(solicitudes);
 }
 
+function actualizarSolicitud(req, res) {
+  const id = Number(req.params.id);
+  const index = solicitudes.findIndex((s) => s.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Solicitud no encontrada" });
+  }
+
+  solicitudes[index] = {
+    ...solicitudes[index],
+    ...req.body
+  };
+
+  res.json(solicitudes[index]);
+}
+
+function eliminarSolicitud(req, res) {
+  const id = Number(req.params.id);
+  const index = solicitudes.findIndex((s) => s.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Solicitud no encontrada" });
+  }
+
+  solicitudes.splice(index, 1);
+  res.json({ message: "Solicitud eliminada correctamente" });
+}
+
 function listarSolicitudesSSR(req, res) {
   res.render("solicitudes", { solicitudes });
 }
@@ -46,5 +74,7 @@ function listarSolicitudesSSR(req, res) {
 module.exports = {
   crearSolicitud,
   listarSolicitudes,
+  actualizarSolicitud,
+  eliminarSolicitud,
   listarSolicitudesSSR
 };
